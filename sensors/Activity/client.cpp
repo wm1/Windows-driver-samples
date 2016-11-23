@@ -60,7 +60,7 @@ NTSTATUS ActivityDevice::GetData()
         // update last sample
         FILETIME TimeStamp = {};
         memcpy_s(m_pLastSample, m_pFilteredSample->AllocatedSizeInBytes, m_pFilteredSample, m_pFilteredSample->AllocatedSizeInBytes);
-        GetSystemTimeAsFileTime(&TimeStamp);
+        GetSystemTimePreciseAsFileTime(&TimeStamp);
         InitPropVariantFromFileTime(&TimeStamp, &(m_pLastSample->List[ACTIVITY_DATA_TIMESTAMP].Value));
 
         // push to clx
@@ -315,7 +315,7 @@ VOID ActivityDevice::OnHistoryTimerExpire(_In_ WDFTIMER historyTimer)
                 status = STATUS_INVALID_PARAMETER;
             }
         }
-        GetSystemTimeAsFileTime(&(data.Timestamp));
+        GetSystemTimePreciseAsFileTime(&(data.Timestamp));
 
         if (NT_SUCCESS(status))
         {
@@ -884,7 +884,7 @@ NTSTATUS ActivityDevice::OnSetDataInterval(_In_ SENSOROBJECT sensorInstance, _In
     if (nullptr == pDevice || Act_Default_MinDataInterval_Ms > dataRateMs)
     {
         status = STATUS_INVALID_PARAMETER;
-        TraceError("ACT %!FUNC! Sensor parameter is invalid. Failed %!STATUS!", status);
+        TraceError("ACT %!FUNC! Invalid parameters! %!STATUS!", status);
     }
     else
     {
@@ -977,7 +977,7 @@ NTSTATUS ActivityDevice::OnSetDataThresholds(
     if (nullptr == pDevice)
     {
         status = STATUS_INVALID_PARAMETER;
-        TraceError("ACT %!FUNC! Sensor(%08X) parameter is invalid. Failed %!STATUS!", (INT) sensorInstance, status);
+        TraceError("ACT %!FUNC! Sensor(0x%p) parameter is invalid. Failed %!STATUS!", sensorInstance, status);
     }
     else
     {

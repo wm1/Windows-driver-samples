@@ -146,7 +146,7 @@ CIhvProfileBase::LoadXml
     }
     else
     {
-		bstrIhvProfile = bstrProfileData;
+        bstrIhvProfile = bstrProfileData;
     }
 
     if ( m_pRootNode )
@@ -158,7 +158,7 @@ CIhvProfileBase::LoadXml
     hr =
     CoCreateInstance
     (
-        CLSID_DOMDocument,
+        CLSID_DOMDocument60,
         NULL,
         CLSCTX_ALL,
         IID_IXMLDOMDocument,

@@ -3,19 +3,19 @@
   <ItemGroup>
     <Filter Include="Source Files">
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx;*</Extensions>
-      <UniqueIdentifier>{8FE1EA5F-0794-452D-8ADA-B87816A19EB9}</UniqueIdentifier>
+      <UniqueIdentifier>{00557774-6CAE-4A42-9465-A85A4F048686}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-      <UniqueIdentifier>{8137339A-0DE2-48F6-B4B6-29FF3DBF10FA}</UniqueIdentifier>
+      <UniqueIdentifier>{68764800-116B-4343-8B60-49693688236E}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files">
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms;man;xml</Extensions>
-      <UniqueIdentifier>{A44CA721-816C-481C-AFB4-FD9F44215A4B}</UniqueIdentifier>
+      <UniqueIdentifier>{25662F7E-DB14-43DD-84A3-E8B7327B6ECE}</UniqueIdentifier>
     </Filter>
     <Filter Include="Driver Files">
       <Extensions>inf;inv;inx;mof;mc;</Extensions>
-      <UniqueIdentifier>{B68042DD-8FCE-4A4B-82E3-3F536F3C45DE}</UniqueIdentifier>
+      <UniqueIdentifier>{372D6D06-B60D-4D04-901A-FC8530D3AC42}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,9 +36,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FilesToPackage Include=".\Debug\\SimpleDeviceOrientationSensor.inf">
-      <Filter>Driver Files</Filter>
-    </FilesToPackage>
     <Inf Include="SimpleDeviceOrientationSensor.inx">
       <Filter>Driver Files</Filter>
     </Inf>

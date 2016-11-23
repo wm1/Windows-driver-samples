@@ -19,12 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{E47411F4-AAEA-4766-B62B-A5171ED47CCF}</ProjectGuid>
+    <ProjectGuid>{2F8C935C-D957-421D-820B-B08C8E1053B0}</ProjectGuid>
     <RootNamespace>$(MSBuildProjectName)</RootNamespace>
     <KMDF_VERSION_MAJOR>1</KMDF_VERSION_MAJOR>
     <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
     <Platform Condition="'$(Platform)' == ''">Win32</Platform>
-    <SampleGuid>{499A6FF7-57CD-4962-9500-BCF78D83750D}</SampleGuid>
+    <SampleGuid>{64C0F854-FD90-49F1-B814-CADDF8C9955E}</SampleGuid>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -81,11 +81,6 @@
       <WppKernelMode>true</WppKernelMode>
       <WppScanConfigurationData>WdfMultiComp.h</WppScanConfigurationData>
     </ClCompile>
-    <Inf Include="WdfMultiComp.inx">
-      <Architecture>$(InfArch)</Architecture>
-      <SpecifyArchitecture>true</SpecifyArchitecture>
-      <CopyOutput>.\$(IntDir)\WdfMultiComp.inf</CopyOutput>
-    </Inf>
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetName>WdfMultiComp</TargetName>
@@ -174,7 +169,6 @@
   <ItemGroup>
     <Inf Exclude="@(Inf)" Include="*.inf" />
     <FilesToPackage Include="$(TargetPath)" Condition="'$(ConfigurationType)'=='Driver' or '$(ConfigurationType)'=='DynamicLibrary'" />
-    <FilesToPackage Include="@(Inf->'%(CopyOutput)')" Condition="'@(Inf)'!=''" />
   </ItemGroup>
   <ItemGroup>
     <None Exclude="@(None)" Include="*.txt;*.htm;*.html" />

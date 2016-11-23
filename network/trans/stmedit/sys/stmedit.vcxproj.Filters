@@ -3,30 +3,55 @@
   <ItemGroup>
     <Filter Include="Source Files">
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx;*</Extensions>
-      <UniqueIdentifier>{3D06BA82-AC80-46D1-B13E-F01845AF9A9C}</UniqueIdentifier>
+      <UniqueIdentifier>{B982E3FA-FE5E-446B-BF39-65C533B117A9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-      <UniqueIdentifier>{2D8AF9DE-2497-4917-9CCF-7C147BB503A4}</UniqueIdentifier>
+      <UniqueIdentifier>{92648371-83D5-4CCE-AA54-9B689B706227}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files">
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms;man;xml</Extensions>
-      <UniqueIdentifier>{B9C19587-10DE-473E-AF48-2BDC5E84B3D7}</UniqueIdentifier>
+      <UniqueIdentifier>{163FDC8F-1EFF-4545-99A5-B189C0A6F18A}</UniqueIdentifier>
     </Filter>
     <Filter Include="Driver Files">
       <Extensions>inf;inv;inx;mof;mc;</Extensions>
-      <UniqueIdentifier>{02D242A6-B147-4BA5-BCAA-8086413C2C7E}</UniqueIdentifier>
+      <UniqueIdentifier>{E7E65CD5-C0F5-4962-AAB1-B9A9BA383DD9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="inline_edit.c">
+    <ClCompile Include="InlineEdit.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="oob_edit.c">
+    <ClCompile Include="LwQueue.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stream_callout.c">
+    <ClCompile Include="OobEdit.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="StreamEdit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LwQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StreamEdit.h" />
+    <ClInclude Include="Trace.h" />
+    <ClInclude Include="LwQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StreamEdit.h" />
+    <ClInclude Include="Trace.h" />
+    <ClInclude Include="LwQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StreamEdit.h" />
+    <ClInclude Include="Trace.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Inf Include="*.inf">
+      <Filter>Driver Files</Filter>
+    </Inf>
   </ItemGroup>
 </Project>

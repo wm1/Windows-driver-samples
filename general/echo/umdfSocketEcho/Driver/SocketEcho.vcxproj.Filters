@@ -3,19 +3,19 @@
   <ItemGroup>
     <Filter Include="Source Files">
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx;*</Extensions>
-      <UniqueIdentifier>{ED119046-004F-4EA8-88D2-ED4E43A285D2}</UniqueIdentifier>
+      <UniqueIdentifier>{76642063-E1CB-43C5-8493-5F651D92F60C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-      <UniqueIdentifier>{81E40625-7071-4159-B4B0-94DC1ECBC3F8}</UniqueIdentifier>
+      <UniqueIdentifier>{4AB44AAB-2BDE-4DA4-A128-40382366A9F5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files">
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms;man;xml</Extensions>
-      <UniqueIdentifier>{BF6D7038-8154-4206-84CC-15F05F014BCC}</UniqueIdentifier>
+      <UniqueIdentifier>{005AFEBA-780E-49DC-BCB8-4163463DE6D5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Driver Files">
       <Extensions>inf;inv;inx;mof;mc;</Extensions>
-      <UniqueIdentifier>{8574D23A-10D4-4701-885F-95D7059BCA72}</UniqueIdentifier>
+      <UniqueIdentifier>{FDF16DEE-FA54-49E3-BC76-FCFD47F8BF37}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -37,14 +37,6 @@
     <None Include="exports.def">
       <Filter>Source Files</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FilesToPackage Include=".\Debug\\SocketEcho.inf">
-      <Filter>Driver Files</Filter>
-    </FilesToPackage>
-    <Inf Include="SocketEcho.inx">
-      <Filter>Driver Files</Filter>
-    </Inf>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SocketEcho.rc">

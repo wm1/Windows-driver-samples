@@ -3,19 +3,19 @@
   <ItemGroup>
     <Filter Include="Source Files">
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx;*</Extensions>
-      <UniqueIdentifier>{2CABA5C9-80C7-4E60-BEA7-32D9A2EAA7BB}</UniqueIdentifier>
+      <UniqueIdentifier>{E51044F1-2844-4B85-9CB3-50C5574B73E6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-      <UniqueIdentifier>{A2ACE853-D985-44E1-B2A8-A7A4DAB1AAB2}</UniqueIdentifier>
+      <UniqueIdentifier>{18DACA49-0487-4FC6-94D7-DE977A2AD8D5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files">
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms;man;xml</Extensions>
-      <UniqueIdentifier>{F30F39F6-AB44-41F0-9B71-C4C30F923ED3}</UniqueIdentifier>
+      <UniqueIdentifier>{60868430-E51C-40B0-86F8-D5C119418603}</UniqueIdentifier>
     </Filter>
     <Filter Include="Driver Files">
       <Extensions>inf;inv;inx;mof;mc;</Extensions>
-      <UniqueIdentifier>{CE567ED5-70CD-43EE-AEC5-2831011DF02E}</UniqueIdentifier>
+      <UniqueIdentifier>{B845F613-F2F8-4EDB-8CAE-574E38ABD746}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,9 +36,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FilesToPackage Include=".\Debug\\Activity.inf">
-      <Filter>Driver Files</Filter>
-    </FilesToPackage>
     <Inf Include="Activity.inx">
       <Filter>Driver Files</Filter>
     </Inf>

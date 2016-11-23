@@ -241,6 +241,28 @@ BOOLEAN InterpretTransferPacketError(PTRANSFER_PACKET Pkt)
             if (Pkt->Irp->IoStatus.Status == STATUS_VERIFY_REQUIRED) {
                 shouldRetry = TRUE;
             }
+#if (NTDDI_VERSION >= NTDDI_WINBLUE)
+            else if (ClasspSrbTimeOutStatus(Pkt->Srb)) {
+
+                Pkt->TimedOut = TRUE;
+
+                if (shouldRetry) {
+                    //
+                    // For requests that have timed-out we may only perform a limited
+                    // number of retries.  This is typically less than the general
+                    // number of retries allowed.
+                    //
+                    if (Pkt->NumIoTimeoutRetries == 0) {
+                        shouldRetry = FALSE;
+                    } else {
+                        Pkt->NumIoTimeoutRetries--;
+                        //
+                        // We expect to be able to retry if there are some general retries remaining.
+                        //
+                    }
+                }
+            }
+#endif
 
             if (shouldRetry)
             {
@@ -286,10 +308,7 @@ BOOLEAN InterpretTransferPacketError(PTRANSFER_PACKET Pkt)
 
             }
 #if (NTDDI_VERSION >= NTDDI_WINBLUE)
-            else if (SrbGetSrbStatus(Pkt->Srb) == SRB_STATUS_BUS_RESET ||
-                      SrbGetSrbStatus(Pkt->Srb) == SRB_STATUS_TIMEOUT ||
-                      SrbGetSrbStatus(Pkt->Srb) == SRB_STATUS_COMMAND_TIMEOUT ||
-                      SrbGetSrbStatus(Pkt->Srb) == SRB_STATUS_ABORTED) {
+            else if (ClasspSrbTimeOutStatus(Pkt->Srb)) {
 
                 Pkt->TimedOut = TRUE;
 
@@ -306,7 +325,6 @@ BOOLEAN InterpretTransferPacketError(PTRANSFER_PACKET Pkt)
                         //
                         // We expect to be able to retry if there are some general retries remaining.
                         //
-                        NT_ASSERT(Pkt->NumRetries > 0);
                     }
                 }
             }
@@ -436,30 +454,49 @@ BOOLEAN RetryTransferPacket(PTRANSFER_PACKET Pkt)
 {
     BOOLEAN packetDone;
     BOOLEAN scaleDown = FALSE;
+    PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = (PFUNCTIONAL_DEVICE_EXTENSION)Pkt->Fdo->DeviceExtension;
+    PCLASS_PRIVATE_FDO_DATA fdoData = fdoExtension->PrivateFdoData;
+    PCDB pCdb = SrbGetCdb(Pkt->Srb);
+
+    if(ClasspIsThinProvisioningError((PSCSI_REQUEST_BLOCK)Pkt->Srb) &&
+        (pCdb != NULL) && IS_SCSIOP_READWRITE(pCdb->CDB10.OperationCode)) {
+
+        if(Pkt->NumThinProvisioningRetries >= NUM_THIN_PROVISIONING_RETRIES) {
+            //We've already retried this the maximum times.  Bail out.
+            return TRUE;
+        }
+        Pkt->NumThinProvisioningRetries++;
+    }
+    else {
+        NT_ASSERT(Pkt->NumRetries > 0 || Pkt->RetryHistory);
+        Pkt->NumRetries--;
+    }
 
     TracePrint((TRACE_LEVEL_INFORMATION, TRACE_FLAG_GENERAL, "retrying failed transfer (pkt=%ph, op=%s)", Pkt, DBGGETSCSIOPSTR(Pkt->Srb)));
 
-    NT_ASSERT(Pkt->NumRetries > 0 || Pkt->RetryHistory);
-    Pkt->NumRetries--;
+    if (!fdoData->DisableThrottling) {
 
-    //
-    // If this is the last retry, then turn off disconnect, sync transfer,
-    // and tagged queuing.  On all other retries, leave the original settings.
-    //
-    if (Pkt->NumRetries == 0) {
-        scaleDown = TRUE;
-    }
+        //
+        // If this is the last retry, then turn off disconnect, sync transfer,
+        // and tagged queuing.  On all other retries, leave the original settings.
+        // Do not apply this for thin provisioning soft threshold errors, since
+        // they should succeed as soon as they're retried on the right IT nexus.
+        //
+        if ((Pkt->NumRetries == 0) && !ClasspIsThinProvisioningError((PSCSI_REQUEST_BLOCK)Pkt->Srb)) {
+            scaleDown = TRUE;
+        }
 
 #if (NTDDI_VERSION >= NTDDI_WINBLUE)
-    //
-    // If this request previously timed-out and there are no more retries left
-    // for timed-out requests then we should also apply the scale down.
-    //
-    if (Pkt->TimedOut &&
-        Pkt->NumIoTimeoutRetries == 0) {
-        scaleDown = TRUE;
-    }
+        //
+        // If this request previously timed-out and there are no more retries left
+        // for timed-out requests, then we should also apply the scale down.
+        //
+        if (Pkt->TimedOut && Pkt->NumIoTimeoutRetries == 0) {
+            scaleDown = TRUE;
+        }
 #endif
+    }
+
 
     if (scaleDown) {
         /*
@@ -476,12 +513,8 @@ BOOLEAN RetryTransferPacket(PTRANSFER_PACKET Pkt)
 
     if (Pkt->Irp->IoStatus.Status == STATUS_INSUFFICIENT_RESOURCES) {
 
-        PCDB pCdb = SrbGetCdb(Pkt->Srb);
         UCHAR cdbOpcode = 0;
         BOOLEAN isReadWrite = FALSE;
-
-        PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = Pkt->Fdo->DeviceExtension;
-        PCLASS_PRIVATE_FDO_DATA fdoData = fdoExtension->PrivateFdoData;
 
         if (pCdb) {
             cdbOpcode = pCdb->CDB10.OperationCode;

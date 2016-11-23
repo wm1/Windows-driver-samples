@@ -3,19 +3,19 @@
   <ItemGroup>
     <Filter Include="Source Files">
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx;*</Extensions>
-      <UniqueIdentifier>{D1F8A3E1-FDAA-4BB1-9ED5-5C2237B070A1}</UniqueIdentifier>
+      <UniqueIdentifier>{DD6C0A8F-CD5A-4780-8FF9-CBB81D0D855E}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-      <UniqueIdentifier>{63723244-91AD-468B-B2D5-C9720A362381}</UniqueIdentifier>
+      <UniqueIdentifier>{A1497843-5B68-4D99-AAE0-E16180026D77}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files">
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms;man;xml</Extensions>
-      <UniqueIdentifier>{F64A4E05-C5D3-41CE-9B8E-4B303D852777}</UniqueIdentifier>
+      <UniqueIdentifier>{3497842A-32EA-48D3-97E5-2EEE032D4AA3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Driver Files">
       <Extensions>inf;inv;inx;mof;mc;</Extensions>
-      <UniqueIdentifier>{ACD4D5C7-344D-4734-BF67-DF249474349A}</UniqueIdentifier>
+      <UniqueIdentifier>{C1A4FA85-8FA5-465E-B288-325A1296C6E9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -31,13 +31,5 @@
     <ClCompile Include="rawpdo.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <FilesToPackage Include=".\Debug\\kmdf_enumswitches.inf">
-      <Filter>Driver Files</Filter>
-    </FilesToPackage>
-    <Inf Include="kmdf_enumswitches.inx">
-      <Filter>Driver Files</Filter>
-    </Inf>
   </ItemGroup>
 </Project>

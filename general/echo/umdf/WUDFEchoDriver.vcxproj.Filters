@@ -3,19 +3,19 @@
   <ItemGroup>
     <Filter Include="Source Files">
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx;*</Extensions>
-      <UniqueIdentifier>{78D910D7-E92B-4734-A811-EE671E018AD7}</UniqueIdentifier>
+      <UniqueIdentifier>{CF73CF52-2BA2-434D-8E38-8F730D54F150}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-      <UniqueIdentifier>{D9527C10-A566-4A05-839C-005DACECC7AF}</UniqueIdentifier>
+      <UniqueIdentifier>{6D44B960-AD87-4EA1-80E4-D63DF6914D51}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files">
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms;man;xml</Extensions>
-      <UniqueIdentifier>{F244522B-A2AF-46A0-BF42-64F811F1646C}</UniqueIdentifier>
+      <UniqueIdentifier>{9542D238-C8CE-44BC-9307-50CEDCCA5F25}</UniqueIdentifier>
     </Filter>
     <Filter Include="Driver Files">
       <Extensions>inf;inv;inx;mof;mc;</Extensions>
-      <UniqueIdentifier>{D6D8C255-A574-4240-9F8E-EDE56A98BC63}</UniqueIdentifier>
+      <UniqueIdentifier>{D77C3549-2C94-49EB-909E-54EB79474A98}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -37,14 +37,6 @@
     <None Include="exports.def">
       <Filter>Source Files</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FilesToPackage Include=".\Debug\\WudfEchoDriver.inf">
-      <Filter>Driver Files</Filter>
-    </FilesToPackage>
-    <Inf Include="WudfEchoDriver.inx">
-      <Filter>Driver Files</Filter>
-    </Inf>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Echo.rc">

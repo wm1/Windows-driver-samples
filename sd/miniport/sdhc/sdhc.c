@@ -86,12 +86,15 @@ Return Value:
     InitializationData.RequestDpc = SdhcRequestDpc;
     InitializationData.SaveContext = SdhcSaveContext;
     InitializationData.RestoreContext = SdhcRestoreContext;
+    InitializationData.PowerControlCallback = SdhcPoFxPowerControlCallback;
+    InitializationData.Cleanup = SdhcCleanup;
 
     //
     // Provide the number of slots and their size.
     //
 
     InitializationData.PrivateExtensionSize = sizeof(SDHC_EXTENSION);
+    InitializationData.CrashdumpSupported = TRUE;
 
     //
     // Hook up the IRP dispatch routines.
@@ -221,7 +224,8 @@ SdhcSlotInitialize(
     _In_ PVOID PrivateExtension,
     _In_ PHYSICAL_ADDRESS PhysicalBase,
     _In_ PVOID VirtualBase,
-    _In_ ULONG Length
+    _In_ ULONG Length,
+    _In_ BOOLEAN CrashdumpMode
     )
 
 /*++
@@ -233,6 +237,14 @@ Routine Description:
 Arguments:
 
     SlotExtension - SlotExtension interface between sdhost and this miniport.
+
+    PhysicalBase - Physical base address of the host controller register space.
+
+    VirtualBase - Mapped register space.
+
+    Length - Length of the host register set in bytes.
+
+    CrashdumpMode - whether this miniport is being used for crashdump.
 
 Return value:
 
@@ -266,6 +278,12 @@ Return value:
         (PSD_HOST_CONTROLLER_REGISTERS) VirtualBase;
 
     //
+    // Check whether the driver is in crashdump mode.
+    //
+
+    SdhcExtension->CrashdumpMode = CrashdumpMode;
+
+    //
     // Initialize host capabilities.
     //
 
@@ -294,6 +312,15 @@ Return value:
     Capabilities->AlignmentRequirement = 
         (CapabilitiesReg.SystemBus64Support ? 
             sizeof(ULONGLONG) : sizeof(ULONG)) - 1;
+
+    //
+    // For small transfers (SDIO) we want to use PIO for performance,
+    // for both reads and writes <= 64 bytes.
+    //
+
+    Capabilities->PioTransferMaxThreshold = 64;
+    Capabilities->Flags.UsePioForRead = TRUE;
+    Capabilities->Flags.UsePioForWrite = TRUE;
 
     if (CapabilitiesReg.Adma2Support) {
         Capabilities->Supported.ScatterGatherDma = 1;
@@ -356,6 +383,7 @@ Return value:
         Capabilities->Supported.SoftwareTuning = 1;
     }
 
+    Capabilities->Supported.AutoCmd12 = 1;
     if (SpecVersion >= SDHC_SPEC_VERSION_3) {
         Capabilities->Supported.AutoCmd23 = 1;
     }
@@ -488,8 +516,11 @@ Return value:
         break;
 
     case SdSetSignalingVoltage:
-        Status = SdhcSetSignaling(SdhcExtension, 
-                                  BusOperation->Parameters.SignalingVoltage);
+        Status = 
+            SdhcSetSignaling(
+                SdhcExtension, 
+                (BOOLEAN)(BusOperation->Parameters.SignalingVoltage == 
+                          SdSignalingVoltage18));
 
         break;
 
@@ -508,6 +539,13 @@ Return value:
         Status = SdhcSetPresetValue(
                     SdhcExtension,
                     BusOperation->Parameters.PresetValueEnabled);
+
+        break;
+
+    case SdSetBlockGapInterrupt:
+        Status = SdhcEnableBlockGapInterrupt(
+                    SdhcExtension,
+                    BusOperation->Parameters.BlockGapIntEnabled);
 
         break;
 
@@ -590,9 +628,9 @@ SdhcSlotInterrupt(
     _In_ PVOID PrivateExtension,
     _Out_ PULONG Events,
     _Out_ PULONG Errors,
-    _Out_ PBOOLEAN NotifyCardChange,
-    _Out_ PBOOLEAN NotifySdioInterrupt,
-    _Out_ PBOOLEAN NotifyTuning
+    _Out_ PBOOLEAN CardChange,
+    _Out_ PBOOLEAN SdioInterrupt,
+    _Out_ PBOOLEAN Tuning
     )
 
 /*++
@@ -636,8 +674,7 @@ Return value:
     //
 
     if (*Events & SDHC_IS_CARD_DETECT) {
-        *NotifyCardChange = TRUE;
-        *Events &= ~SDHC_IS_CARD_DETECT;
+        *CardChange = TRUE;
     }
 
     //
@@ -645,8 +682,7 @@ Return value:
     //
     
     if (*Events & SDHC_IS_CARD_INTERRUPT) {
-        *NotifySdioInterrupt = TRUE;
-        *Events &= ~SDHC_IS_CARD_INTERRUPT;
+        *SdioInterrupt = TRUE; 
     }
 
     //
@@ -654,8 +690,7 @@ Return value:
     //
 
     if (*Events & SDHC_IS_TUNING_INTERRUPT) {
-        *NotifyTuning = TRUE;
-        *Events &= ~SDHC_IS_TUNING_INTERRUPT;
+        *Tuning = TRUE;
     }
 
     //
@@ -666,7 +701,11 @@ Return value:
     //
 
     SdhcAcknowledgeInterrupts(SdhcExtension, (USHORT) *Events);
-    return (*Events != 0);
+    *Events &= ~(SDHC_IS_CARD_DETECT |
+                 SDHC_IS_CARD_INTERRUPT |
+                 SDHC_IS_TUNING_INTERRUPT);
+
+    return (*Events != 0) || (*CardChange) || (*SdioInterrupt) || (*Tuning);
 }
 
 NTSTATUS
@@ -959,6 +998,85 @@ Return value:
     UNREFERENCED_PARAMETER(PrivateExtension);
 }
 
+NTSTATUS
+SdhcPoFxPowerControlCallback(
+    _In_ PSD_MINIPORT Miniport,
+    _In_ LPCGUID PowerControlCode,
+    _In_reads_bytes_opt_(InputBufferSize) PVOID InputBuffer,
+    _In_ SIZE_T InputBufferSize,
+    _Out_writes_bytes_opt_(OutputBufferSize) PVOID OutputBuffer,
+    _In_ SIZE_T OutputBufferSize,
+    _Out_opt_ PSIZE_T BytesReturned
+    )
+
+/*++
+
+Routine Description:
+
+    Handle any PoFxPowerControl callbacks.
+
+Arguments:
+
+    Miniport - Miniport interface for the controller.
+
+    PowerControlCode - GUID defining a platform-specific PoFxPowerControl
+                       method.
+
+    InputBuffer - Buffer containing any input arguments.
+
+    InputBufferSize - Size of InputBuffer in bytes.
+
+    OutputBuffer - Buffer containing any output results.
+
+    OutputBufferSize - Size of OutputBuffer in bytes.
+
+    BytesReturned - Number of bytes returned.
+
+Return value:
+
+    NTSTATUS
+
+--*/
+
+{
+
+    UNREFERENCED_PARAMETER(Miniport);
+    UNREFERENCED_PARAMETER(PowerControlCode);
+    UNREFERENCED_PARAMETER(InputBuffer);
+    UNREFERENCED_PARAMETER(InputBufferSize);
+    UNREFERENCED_PARAMETER(OutputBuffer);
+    UNREFERENCED_PARAMETER(OutputBufferSize);
+    UNREFERENCED_PARAMETER(BytesReturned);
+
+    return STATUS_NOT_IMPLEMENTED;
+}
+
+VOID
+SdhcCleanup(
+    _In_ PSD_MINIPORT Miniport
+    )
+
+/*++
+
+Routine Description:
+
+    Cleanup any memory allocations done during the lifetime of the driver.
+
+Arguments:
+
+    Miniport - Miniport interface for the controller.
+
+Return value:
+
+    NTSTATUS
+
+--*/
+
+{
+
+    UNREFERENCED_PARAMETER(Miniport);
+}
+
 //-----------------------------------------------------------------------------
 // Host routine implementations.
 //-----------------------------------------------------------------------------
@@ -1023,7 +1141,7 @@ Return value:
     do {
         Retries -= 1;
         if (Retries == 0) {
-            return STATUS_TIMEOUT;
+            return STATUS_IO_TIMEOUT;
         }
 
         Reset = SdhcReadRegisterUchar(SdhcExtension, SDHC_RESET);
@@ -1041,6 +1159,15 @@ Return value:
     SdhcWriteRegisterUchar(SdhcExtension,
                            SDHC_TIMEOUT_CONTROL,
                            SDHC_TC_MAX_DATA_TIMEOUT);
+
+    //
+    // Clear detection interrupt after reset, we will pick up the
+    // status from the present state register
+    //
+
+    SdhcWriteRegisterUshort(SdhcExtension,
+                            SDHC_INTERRUPT_STATUS,
+                            0xFFFF);
 
     //
     // Initialize DMA if the controller supports it.
@@ -1084,7 +1211,7 @@ Return value:
 
     STATUS_SUCCESS - The clock was successfuly set.
 
-    STATUS_TIMEOUT - The clock did not stabilize in time.
+    STATUS_IO_TIMEOUT - The clock did not stabilize in time.
 
 --*/
 
@@ -1118,7 +1245,7 @@ Return value:
     do {
         Retries -= 1;
         if (Retries == 0) {
-            return STATUS_TIMEOUT;
+            return STATUS_IO_TIMEOUT;
         }
 
         ClockControl = 
@@ -1173,7 +1300,7 @@ Return value:
 
     STATUS_INVALID_PARAMETER - The voltage profile provided was invalid.
 
-    STATUS_TIMEOUT - The bus voltage did not stabilize in time.
+    STATUS_IO_TIMEOUT - The bus voltage did not stabilize in time.
 
 --*/
 
@@ -1225,7 +1352,7 @@ Return value:
     do {
         Retries -= 1;
         if (Retries == 0) {
-            return STATUS_TIMEOUT;
+            return STATUS_IO_TIMEOUT;
         }
 
         SdhcWriteRegisterUchar(SdhcExtension, SDHC_POWER_CONTROL, PowerControl);
@@ -1247,7 +1374,7 @@ Return value:
     do {
         Retries -= 1;
         if (Retries == 0) {
-            return STATUS_TIMEOUT;
+            return STATUS_IO_TIMEOUT;
         }
 
         SdhcWriteRegisterUchar(SdhcExtension, SDHC_POWER_CONTROL, PowerControl);
@@ -1523,7 +1650,7 @@ Return value:
     ClockControl = SdhcReadRegisterUshort(SdhcExtension, SDHC_CLOCK_CONTROL);
     ClockControl &= ~SDHC_CC_CLOCK_ENABLE;
     SdhcWriteRegisterUshort(SdhcExtension, SDHC_CLOCK_CONTROL, ClockControl);
-    SdPortWait(10 * 1000);
+    SdPortWait(10000);
 
     //
     // DAT[3:0] must be all zeroes.
@@ -1552,7 +1679,7 @@ Return value:
     }
 
     SdhcWriteRegisterUshort(SdhcExtension, SDHC_HOST_CONTROL2, HostControl2);
-    SdPortWait(5 * 1000);
+    SdPortWait(5000);
     HostControl2 = SdhcReadRegisterUshort(SdhcExtension, SDHC_HOST_CONTROL2);
 
     //
@@ -1575,6 +1702,8 @@ Return value:
     //
 
     ClockControl = SdhcReadRegisterUshort(SdhcExtension, SDHC_CLOCK_CONTROL);
+    ClockControl |= SDHC_CC_CLOCK_ENABLE;
+    SdhcWriteRegisterUshort(SdhcExtension, SDHC_CLOCK_CONTROL, ClockControl);
     SdPortWait(10000);
 
     //
@@ -1753,6 +1882,48 @@ Return value:
     return STATUS_SUCCESS;
 }
 
+NTSTATUS
+SdhcEnableBlockGapInterrupt(
+    _In_ PSDHC_EXTENSION SdhcExtension,
+    _In_ BOOLEAN Enable
+    )
+
+/*++
+
+Routine Description:
+
+    Enables block gap interrupts for SDIO cards in 4-bit mode.
+    Caller has responsibility to make sure this is only called for
+    appropriate devices.
+
+Arguments:
+
+    SdhcExtension - Host controller specific driver context.
+
+    Enable - Enable or disable block gap interrupts.
+
+Return value:
+
+    None.
+
+--*/
+
+{
+
+    UCHAR Control;
+
+    Control = SdhcReadRegisterUchar(SdhcExtension, SDHC_BLOCKGAP_CONTROL);
+    if (Enable) {
+        Control |= SDHC_BGC_INTERRUPT_ENABLE;
+
+    } else {
+        Control &= ~SDHC_BGC_INTERRUPT_ENABLE;
+    }
+
+    SdhcWriteRegisterUchar(SdhcExtension, SDHC_BLOCKGAP_CONTROL, Control);
+    return STATUS_SUCCESS;
+}
+
 VOID
 SdhcSetBlockGapControl(
     _In_ PSDHC_EXTENSION SdhcExtension,
@@ -1835,13 +2006,15 @@ Return value:
     // Enable the interrupt signals from controller to OS.
     //
 
-    SdhcWriteRegisterUshort(SdhcExtension,
-                            SDHC_INTERRUPT_SIGNAL_ENABLE,
-                            InterruptEnable);
+    if (!SdhcExtension->CrashdumpMode) {
+        SdhcWriteRegisterUshort(SdhcExtension,
+                                SDHC_INTERRUPT_SIGNAL_ENABLE,
+                                InterruptEnable);
 
-    SdhcWriteRegisterUshort(SdhcExtension,
-                            SDHC_ERROR_SIGNAL_ENABLE,
-                            0xFFFF);
+        SdhcWriteRegisterUshort(SdhcExtension,
+                                SDHC_ERROR_SIGNAL_ENABLE,
+                                0xFFFF);
+    }
 
     //
     // Enable the interrupt signals on the controller.
@@ -2427,6 +2600,7 @@ Return value:
         return STATUS_INVALID_PARAMETER;
     }
 
+    TransferMode = 0;
     TransferMode &= ~(SDHC_TM_AUTO_CMD12_ENABLE |
                       SDHC_TM_AUTO_CMD23_ENABLE |
                       SDHC_TM_DMA_ENABLE |

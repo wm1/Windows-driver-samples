@@ -3,19 +3,19 @@
   <ItemGroup>
     <Filter Include="Source Files">
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx;*</Extensions>
-      <UniqueIdentifier>{4737C037-E6F5-419C-AC9F-B88532462988}</UniqueIdentifier>
+      <UniqueIdentifier>{1291330B-BA98-4314-80CF-D3134BEDBBA6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-      <UniqueIdentifier>{C6BF209A-BDDA-4488-883C-E4C3BDD7AB16}</UniqueIdentifier>
+      <UniqueIdentifier>{9C6A940E-519A-42F6-A82D-26F842A0D171}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files">
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms;man;xml</Extensions>
-      <UniqueIdentifier>{EB50A155-6055-4736-A912-5B2970F2EFBE}</UniqueIdentifier>
+      <UniqueIdentifier>{6E878311-5CC7-4E2F-A368-13D99DB045D2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Driver Files">
       <Extensions>inf;inv;inx;mof;mc;</Extensions>
-      <UniqueIdentifier>{3B9BA3C9-953B-49F5-8F39-A7FE1522F2A5}</UniqueIdentifier>
+      <UniqueIdentifier>{A229BB48-B83A-416A-8CF5-B15D4793A8C0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,9 +36,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FilesToPackage Include=".\Debug\\CustomSensors.inf">
-      <Filter>Driver Files</Filter>
-    </FilesToPackage>
     <Inf Include="CustomSensors.inx">
       <Filter>Driver Files</Filter>
     </Inf>

@@ -3,28 +3,22 @@
   <ItemGroup>
     <Filter Include="Source Files">
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx;*</Extensions>
-      <UniqueIdentifier>{5EF5CA7C-7CAE-4919-A630-40021ADBAD7A}</UniqueIdentifier>
+      <UniqueIdentifier>{A35FAE4A-A10D-4F57-875A-870D11320AB3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-      <UniqueIdentifier>{36AFBC05-BF36-497F-9479-232E53032646}</UniqueIdentifier>
+      <UniqueIdentifier>{EE71E8BF-130F-40AC-9AAF-550A55E7168B}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files">
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms;man;xml</Extensions>
-      <UniqueIdentifier>{4754802C-E1A1-40AA-A07E-FDD309D1FE65}</UniqueIdentifier>
+      <UniqueIdentifier>{F1CEAE6E-F3C8-4CA5-A43C-133A6A38B446}</UniqueIdentifier>
     </Filter>
     <Filter Include="Driver Files">
       <Extensions>inf;inv;inx;mof;mc;</Extensions>
-      <UniqueIdentifier>{2873486C-A803-4AC3-99EC-2F2589EFBAD4}</UniqueIdentifier>
+      <UniqueIdentifier>{EDD02E0D-300A-45CC-A637-CC38CECCA39A}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <FilesToPackage Include=".\Debug\\WmiSamp.inf">
-      <Filter>Driver Files</Filter>
-    </FilesToPackage>
-    <Inf Include=".\WmiSamp.inx">
-      <Filter>Driver Files</Filter>
-    </Inf>
     <MofComp Include="wmisamp.mof">
       <Filter>Driver Files</Filter>
     </MofComp>

@@ -120,9 +120,24 @@ NTSTATUS ADXL345AccDevice::Initialize(
             InitPropVariantFromString(SENSOR_ACCELEROMETER_MODEL,
                 &(m_pEnumerationProperties->List[SENSOR_ENUMERATION_PROPERTY_MODEL].Value));
             
+            m_pEnumerationProperties->List[SENSOR_ENUMERATION_PROPERTY_CONNECTION_TYPE].Key = DEVPKEY_Sensor_ConnectionType;
+            // The DEVPKEY_Sensor_ConnectionType values match the SensorConnectionType enumeration
+            InitPropVariantFromUInt32(0, // 0: INTEGRATED, 1: ATTACHED, 2: EXTERNAL
+                &(m_pEnumerationProperties->List[SENSOR_ENUMERATION_PROPERTY_CONNECTION_TYPE].Value));
+
             m_pEnumerationProperties->List[SENSOR_ENUMERATION_PROPERTY_PERSISTENT_UNIQUE_ID].Key = DEVPKEY_Sensor_PersistentUniqueId;
             InitPropVariantFromCLSID(GUID_Adxl345Device_UniqueID,
                 &(m_pEnumerationProperties->List[SENSOR_ENUMERATION_PROPERTY_PERSISTENT_UNIQUE_ID].Value));
+
+            m_pEnumerationProperties->List[SENSOR_ENUMERATION_PROPERTY_CATEGORY].Key = DEVPKEY_Sensor_Category;
+            InitPropVariantFromCLSID(GUID_SensorCategory_Motion,
+                &(m_pEnumerationProperties->List[SENSOR_ENUMERATION_PROPERTY_CATEGORY].Value));
+
+            m_pEnumerationProperties->List[SENSOR_ENUMERATION_PROPERTY_ISPRIMARY].Key = DEVPKEY_Sensor_IsPrimary;
+            InitPropVariantFromBoolean(TRUE,
+                &(m_pEnumerationProperties->List[SENSOR_ENUMERATION_PROPERTY_ISPRIMARY].Value)); // This value should be set to TRUE in order for simple device orientation
+                                                                                                 // to pick up ACC sample readings from this sensor. If this value is set to FALSE
+                                                                                                 // simple device orientation may ignore this sensor.
         }
     }
 
@@ -147,7 +162,7 @@ NTSTATUS ADXL345AccDevice::Initialize(
         {
             FILETIME time;
             m_pSensorData->List[SENSOR_DATA_TIMESTAMP].Key = PKEY_SensorData_Timestamp;
-            GetSystemTimeAsFileTime(&time);
+            GetSystemTimePreciseAsFileTime(&time);
             InitPropVariantFromFileTime(&time, &(m_pSensorData->List[SENSOR_DATA_TIMESTAMP].Value));
         
             m_pSensorData->List[SENSOR_DATA_ACCELERATION_X_G].Key = PKEY_SensorData_AccelerationX_Gs;
@@ -311,7 +326,7 @@ NTSTATUS ADXL345AccDevice::GetData()
             InitPropVariantFromFloat(Sample.Z, &(m_pSensorData->List[SENSOR_DATA_ACCELERATION_Z_G].Value));
     
             FILETIME Timestamp = {};
-            GetSystemTimeAsFileTime(&Timestamp);
+            GetSystemTimePreciseAsFileTime(&Timestamp);
             InitPropVariantFromFileTime(&Timestamp, &(m_pSensorData->List[SENSOR_DATA_TIMESTAMP].Value));
     
             SensorsCxSensorDataReady(m_SensorInstance, m_pSensorData);
@@ -446,7 +461,7 @@ NTSTATUS ADXL345AccDevice::OnStart(
     if (nullptr == pAccDevice)
     {
         Status = STATUS_INVALID_PARAMETER;
-        TraceError("ACC %!FUNC! Sensor(%08X) parameter is invalid %!STATUS!", (INT) SensorInstance, Status);
+        TraceError("ACC %!FUNC! Sensor(0x%p) parameter is invalid %!STATUS!", SensorInstance, Status);
     }
     else if (!pAccDevice->m_PoweredOn)
     {
@@ -504,7 +519,7 @@ NTSTATUS ADXL345AccDevice::OnStop(
     if (nullptr == pAccDevice)
     {
         Status = STATUS_INVALID_PARAMETER;
-        TraceError("ACC %!FUNC! Sensor(%08X) parameter is invalid %!STATUS!", (INT)SensorInstance, Status);
+        TraceError("ACC %!FUNC! Sensor(0x%p) parameter is invalid %!STATUS!", SensorInstance, Status);
     }
     else
     {
@@ -768,23 +783,6 @@ NTSTATUS ADXL345AccDevice::OnGetDataInterval(
     return Status;
 }
 
-// Return the rate that is just less than the desired report interval
-inline DATA_RATE _GetDataRateFromReportInterval(_In_ ULONG ReportInterval)
-{
-    DATA_RATE dataRate = ACCELEROMETER_SUPPORTED_DATA_RATES[0];
-
-    for (ULONG i = 0; i < ACCELEROMETER_SUPPORTED_DATA_RATES_COUNT; i++)
-    {
-        dataRate = ACCELEROMETER_SUPPORTED_DATA_RATES[i];
-        if (dataRate.DataRateInterval <= ReportInterval)
-        {
-            break;
-        }
-    }
-
-    return dataRate;
-}
-
 // Called by Sensor CLX to set sampling rate of the sensor.
 NTSTATUS ADXL345AccDevice::OnSetDataInterval(
     _In_ SENSOROBJECT SensorInstance, // Sensor device object
@@ -926,7 +924,7 @@ NTSTATUS ADXL345AccDevice::OnSetDataThresholds(
     if (nullptr == pAccDevice) 
     {
         Status = STATUS_INVALID_PARAMETER;
-        TraceError("ACC %!FUNC! Sensor(%08X) parameter is invalid %!STATUS!", (INT) SensorInstance, Status);
+        TraceError("ACC %!FUNC! Sensor(0x%p) parameter is invalid %!STATUS!", SensorInstance, Status);
     }
 
     else // if (NT_SUCCESS(Status))

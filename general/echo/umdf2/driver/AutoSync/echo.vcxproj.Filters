@@ -3,28 +3,20 @@
   <ItemGroup>
     <Filter Include="Source Files">
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx;*</Extensions>
-      <UniqueIdentifier>{9B3693A5-EB57-4FA2-8C1B-F85253695D04}</UniqueIdentifier>
+      <UniqueIdentifier>{B7A478F1-3462-402C-B3F4-2DB5F7484941}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-      <UniqueIdentifier>{E32C0D43-4943-449E-82C0-2596D5D3BCEE}</UniqueIdentifier>
+      <UniqueIdentifier>{AE34D3A5-726B-49B1-B974-C4D38F3B8CE0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files">
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms;man;xml</Extensions>
-      <UniqueIdentifier>{ADEC5939-ED9C-4182-879E-AD54FFCB84ED}</UniqueIdentifier>
+      <UniqueIdentifier>{D9E33B3E-851D-4243-A6DA-F559C1FFF3FB}</UniqueIdentifier>
     </Filter>
     <Filter Include="Driver Files">
       <Extensions>inf;inv;inx;mof;mc;</Extensions>
-      <UniqueIdentifier>{216463FB-3A2F-40C2-A52E-263D862032D6}</UniqueIdentifier>
+      <UniqueIdentifier>{CAF21CF9-F7FF-4D7E-8FAD-E38B097DEF0B}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <FilesToPackage Include=".\Debug\\EchoUm.inf">
-      <Filter>Driver Files</Filter>
-    </FilesToPackage>
-    <Inf Include=".\EchoUm.inx">
-      <Filter>Driver Files</Filter>
-    </Inf>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="device.c">

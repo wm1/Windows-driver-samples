@@ -115,6 +115,11 @@ NTSTATUS SdoDevice::Initialize(
         m_pEnumerationProperties->List[SENSOR_PERSISTENT_UNIQUEID].Key = DEVPKEY_Sensor_PersistentUniqueId;
         InitPropVariantFromCLSID(GUID_SdoDevice_UniqueID,
             &(m_pEnumerationProperties->List[SENSOR_PERSISTENT_UNIQUEID].Value));
+
+        m_pEnumerationProperties->List[SENSOR_ISPRIMARY].Key = DEVPKEY_Sensor_IsPrimary;
+        InitPropVariantFromBoolean(FALSE,
+            &(m_pEnumerationProperties->List[SENSOR_ISPRIMARY].Value)); // This value should be set to TRUE if multiple simple device orientation sensors
+                                                                        // exist on the system and this sensor is the primary sensor
     }
 
     //
@@ -170,7 +175,7 @@ NTSTATUS SdoDevice::Initialize(
         m_pData->Count = SDO_DATA_COUNT;
 
         m_pData->List[SDO_DATA_TIMESTAMP].Key = PKEY_SensorData_Timestamp;
-        GetSystemTimeAsFileTime(&Time);
+        GetSystemTimePreciseAsFileTime(&Time);
         InitPropVariantFromFileTime(&Time, &(m_pData->List[SDO_DATA_TIMESTAMP].Value));
 
         m_pData->List[SDO_DATA_SIMPLEDEVICEORIENTATION].Key = PKEY_SensorData_SimpleDeviceOrientation;

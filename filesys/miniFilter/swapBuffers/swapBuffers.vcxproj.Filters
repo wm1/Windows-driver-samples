@@ -3,19 +3,19 @@
   <ItemGroup>
     <Filter Include="Source Files">
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx;*</Extensions>
-      <UniqueIdentifier>{547C6A8B-43E4-4D52-86E9-F04019916975}</UniqueIdentifier>
+      <UniqueIdentifier>{C7B744F5-D8E3-44AF-B03B-3F3CD4420654}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-      <UniqueIdentifier>{43DE78CC-2ACC-400B-9144-EFB61C1A7E2E}</UniqueIdentifier>
+      <UniqueIdentifier>{FC5D5051-223C-4C4F-83DF-26C02D84A949}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files">
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms;man;xml</Extensions>
-      <UniqueIdentifier>{54FF1AAF-29C0-4B36-A01E-964EC486668A}</UniqueIdentifier>
+      <UniqueIdentifier>{C06B2AEB-030A-415F-9470-EAE415E74AAC}</UniqueIdentifier>
     </Filter>
     <Filter Include="Driver Files">
       <Extensions>inf;inv;inx;mof;mc;</Extensions>
-      <UniqueIdentifier>{DB21CD94-ADB1-4062-9C3D-0063158FA18F}</UniqueIdentifier>
+      <UniqueIdentifier>{34BC5A6E-3317-4C17-B297-7E2C99187FBC}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

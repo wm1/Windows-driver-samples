@@ -3,19 +3,19 @@
   <ItemGroup>
     <Filter Include="Source Files">
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx;*</Extensions>
-      <UniqueIdentifier>{06F67341-2370-4DB8-B281-2E622D2C8146}</UniqueIdentifier>
+      <UniqueIdentifier>{EDD2C5B9-427F-4CEB-B703-4E8C15A5792C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-      <UniqueIdentifier>{81CB8FD0-9854-41A8-8288-C99CBEED8E9A}</UniqueIdentifier>
+      <UniqueIdentifier>{955B224B-526C-4C97-B61C-346C0E4E2018}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files">
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms;man;xml</Extensions>
-      <UniqueIdentifier>{00576151-6245-4316-B0D6-A9C1DEAD6E26}</UniqueIdentifier>
+      <UniqueIdentifier>{D74AD0E5-4488-42AB-8FB7-4B77D335E1C4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Driver Files">
       <Extensions>inf;inv;inx;mof;mc;</Extensions>
-      <UniqueIdentifier>{919E6D2D-111D-421B-9634-371A59B22921}</UniqueIdentifier>
+      <UniqueIdentifier>{C4D52125-51E5-49E0-BA2B-B46502ADC556}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -25,13 +25,5 @@
     <ClCompile Include="HwSim.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <FilesToPackage Include=".\Debug\\SingleComponentFStateSample.inf">
-      <Filter>Driver Files</Filter>
-    </FilesToPackage>
-    <Inf Include=".\SingleComponentFStateSample.inx">
-      <Filter>Driver Files</Filter>
-    </Inf>
   </ItemGroup>
 </Project>

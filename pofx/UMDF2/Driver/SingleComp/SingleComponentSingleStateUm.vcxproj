@@ -19,12 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{54734149-462F-4F08-8921-8657E8244D5D}</ProjectGuid>
+    <ProjectGuid>{151FA61D-859F-4496-B1EC-021EB9E9330C}</ProjectGuid>
     <RootNamespace>$(MSBuildProjectName)</RootNamespace>
     <UMDF_VERSION_MAJOR>2</UMDF_VERSION_MAJOR>
     <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
     <Platform Condition="'$(Platform)' == ''">Win32</Platform>
-    <SampleGuid>{0595E788-E11C-4E8F-9E6A-BDA9CD38B976}</SampleGuid>
+    <SampleGuid>{EAB36B80-D708-481B-96F3-DF168641C28B}</SampleGuid>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -82,11 +82,6 @@
       <WppScanConfigurationData>driver.h</WppScanConfigurationData>
       <WppTraceFunction>TraceEvents(LEVEL,FLAGS,MSG,...)</WppTraceFunction>
     </ClCompile>
-    <Inf Include=".\SingleComponentSingleStateUm.inx">
-      <Architecture>$(InfArch)</Architecture>
-      <SpecifyArchitecture>true</SpecifyArchitecture>
-      <CopyOutput>.\$(IntDir)\SingleComponentSingleStateUm.inf</CopyOutput>
-    </Inf>
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetName>SingleComponentSingleStateUm</TargetName>
@@ -107,6 +102,7 @@
       <WarningLevel>Level4</WarningLevel>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\inc</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);UNICODE;_UNICODE</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);___TARGETNAME="""SingleComponentSingleStateUm.DYNLINK"""</PreprocessorDefinitions>
       <ExceptionHandling>
       </ExceptionHandling>
     </ClCompile>
@@ -114,11 +110,13 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WPP_MACRO_USE_KM_VERSION_FOR_UM=1</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\inc</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);UNICODE;_UNICODE</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);___TARGETNAME="""SingleComponentSingleStateUm.DYNLINK"""</PreprocessorDefinitions>
     </Midl>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WPP_MACRO_USE_KM_VERSION_FOR_UM=1</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\inc</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);UNICODE;_UNICODE</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);___TARGETNAME="""SingleComponentSingleStateUm.DYNLINK"""</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies);$(SDK_LIB_PATH)\mincore.lib</AdditionalDependencies>
@@ -131,6 +129,7 @@
       <WarningLevel>Level4</WarningLevel>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\inc</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);UNICODE;_UNICODE</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);___TARGETNAME="""SingleComponentSingleStateUm.DYNLINK"""</PreprocessorDefinitions>
       <ExceptionHandling>
       </ExceptionHandling>
     </ClCompile>
@@ -138,11 +137,13 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WPP_MACRO_USE_KM_VERSION_FOR_UM=1</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\inc</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);UNICODE;_UNICODE</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);___TARGETNAME="""SingleComponentSingleStateUm.DYNLINK"""</PreprocessorDefinitions>
     </Midl>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WPP_MACRO_USE_KM_VERSION_FOR_UM=1</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\inc</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);UNICODE;_UNICODE</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);___TARGETNAME="""SingleComponentSingleStateUm.DYNLINK"""</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies);$(SDK_LIB_PATH)\mincore.lib</AdditionalDependencies>
@@ -155,6 +156,7 @@
       <WarningLevel>Level4</WarningLevel>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\inc</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);UNICODE;_UNICODE</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);___TARGETNAME="""SingleComponentSingleStateUm.DYNLINK"""</PreprocessorDefinitions>
       <ExceptionHandling>
       </ExceptionHandling>
     </ClCompile>
@@ -162,11 +164,13 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WPP_MACRO_USE_KM_VERSION_FOR_UM=1</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\inc</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);UNICODE;_UNICODE</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);___TARGETNAME="""SingleComponentSingleStateUm.DYNLINK"""</PreprocessorDefinitions>
     </Midl>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WPP_MACRO_USE_KM_VERSION_FOR_UM=1</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\inc</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);UNICODE;_UNICODE</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);___TARGETNAME="""SingleComponentSingleStateUm.DYNLINK"""</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies);$(SDK_LIB_PATH)\mincore.lib</AdditionalDependencies>
@@ -179,6 +183,7 @@
       <WarningLevel>Level4</WarningLevel>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\inc</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);UNICODE;_UNICODE</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);___TARGETNAME="""SingleComponentSingleStateUm.DYNLINK"""</PreprocessorDefinitions>
       <ExceptionHandling>
       </ExceptionHandling>
     </ClCompile>
@@ -186,11 +191,13 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WPP_MACRO_USE_KM_VERSION_FOR_UM=1</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\inc</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);UNICODE;_UNICODE</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);___TARGETNAME="""SingleComponentSingleStateUm.DYNLINK"""</PreprocessorDefinitions>
     </Midl>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WPP_MACRO_USE_KM_VERSION_FOR_UM=1</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\inc</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);UNICODE;_UNICODE</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);___TARGETNAME="""SingleComponentSingleStateUm.DYNLINK"""</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies);$(SDK_LIB_PATH)\mincore.lib</AdditionalDependencies>
@@ -199,7 +206,6 @@
   <ItemGroup>
     <Inf Exclude="@(Inf)" Include="*.inf" />
     <FilesToPackage Include="$(TargetPath)" Condition="'$(ConfigurationType)'=='Driver' or '$(ConfigurationType)'=='DynamicLibrary'" />
-    <FilesToPackage Include="@(Inf->'%(CopyOutput)')" Condition="'@(Inf)'!=''" />
   </ItemGroup>
   <ItemGroup>
     <None Exclude="@(None)" Include="*.txt;*.htm;*.html" />

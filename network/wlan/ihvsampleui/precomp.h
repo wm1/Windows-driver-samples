@@ -15,6 +15,7 @@ _Analysis_mode_(_Analysis_code_type_user_code_)
 #include <strsafe.h>
 #include <assert.h>
 #include <wlanihv.h>
+#include <msxml6.h>
 
 // MIDL generated
 #include "ihvsample.h"
